@@ -15,5 +15,6 @@ include_directories(${CURSES_INCLUDE_DIR})
 add_executable(main main.cpp ${SRC_FILES})
 
 target_link_libraries(main ${CURSES_LIBRARIES})
+target_link_libraries(main pthread)
 
 target_include_directories(main PUBLIC ${PROJECT_SOURCE_DIR}/header)
