@@ -3,7 +3,6 @@
 //
 
 #include "../header/Ball.h"
-#include "../header/GameManager.h"
 
 Ball::Ball(WINDOW *window, int id, int **coordinates) {
     getmaxyx(window, max_y, max_x);

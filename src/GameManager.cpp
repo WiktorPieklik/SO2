@@ -6,14 +6,13 @@
 
 GameManager::GameManager(int thread_count)
 {
-    //GameManager::terminate = false;
     init(thread_count);
     for(int i=0; i<thread_count;i++) {
         balls.emplace_back(stdscr, i, coordinates);
         threads.emplace_back(&Ball::run, balls[i]);
     }
     for(int i=0; i<thread_count;i++) {
-        if (threads[i].joinable()){}
+        if (threads[i].joinable())
             threads[i].detach();
     }
     std::thread exit ([](GameManager *manager){

@@ -8,6 +8,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 find_package(Threads)
+find_package(pthreads)
 
 find_package(Curses REQUIRED)
 include_directories(${CURSES_INCLUDE_DIR})
