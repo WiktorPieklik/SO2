@@ -1,5 +1,5 @@
 //
-// Created by Wiktor Pieklik on 16/03/2020.
+// Created by Wiktor Pieklik
 //
 #ifndef SO2_1_BALL_H
 #define SO2_1_BALL_H
@@ -10,6 +10,8 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <atomic>
+#include <random>
 
 using namespace std;
 
@@ -18,17 +20,20 @@ private:
     int x, y;
     int id;
     int max_x, max_y;
-    int stepInMillis;
     int x_direction, y_direction;
-    int** coordinates;
-    bool terminate = false;
+    std::atomic<int **> coordinates;
+    std::atomic<bool> terminated{false};
+
     void move();
+
     void handleCollision(int next_x, int next_y);
 
 public:
-    Ball(WINDOW *window, int id, int** coordinates);
+    Ball(WINDOW *window, int id, int **coordinates);
+
     void run();
-    void exec();
+
+    void terminate_exec();
 };
 
 

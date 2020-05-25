@@ -1,16 +1,16 @@
 //
-// Created by Wiktor Pieklik on 16/03/2020.
+// Created by Wiktor Pieklik
 //
 
 #include "../header/Ball.h"
 
 Ball::Ball(WINDOW *window, int id, int **coordinates) {
     getmaxyx(window, max_y, max_x);
-    x = rand() % max_x;
-    y = rand() % max_y;
-    stepInMillis = rand() % 20001 + 20000;
-    x_direction = 1;
-    y_direction = 1;
+    x = max_x / 2;
+    y = max_y - 1;
+
+    x_direction = (std::rand() % 5 + 1) * (1 - (std::rand() % 3) + 1);
+    y_direction = std::rand() % 3 + 1;
     this->coordinates = coordinates;
     this->id = id;
 }
@@ -22,19 +22,19 @@ void Ball::move()
     handleCollision(next_x, next_y);
     coordinates[0][id] = y;
     coordinates[1][id] = x;
-    this_thread::sleep_for(chrono::microseconds(stepInMillis));
+    this_thread::sleep_for(std::chrono::milliseconds(35));
 }
 
 void Ball::handleCollision(int next_x, int next_y)
 {
-    //horizontal collisons
+    //horizontal collisions
     if(next_x > max_x || next_x < 0) {
         x_direction *= -1;
     }
     else {
         x = next_x;
     }
-
+    //vertical collisions
     if(next_y > max_y || next_y < 0) {
         y_direction *= -1;
     }
@@ -43,14 +43,12 @@ void Ball::handleCollision(int next_x, int next_y)
     }
 }
 
-void Ball::run()
-{
-    while(!terminate) {
+void Ball::run() {
+    while (!this->terminated) {
         move();
     }
 }
 
-void Ball::exec()
-{
-    terminate = true;
+void Ball::terminate_exec() {
+    this->terminated = true;
 }
