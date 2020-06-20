@@ -19,7 +19,6 @@ private:
     std::atomic<int **> coordinates{};
 
     void init();
-
     void create_threads();
 
     int thread_count;
@@ -35,8 +34,9 @@ public:
     int run();
 
     void terminate_program();
-
     void requestJoin();
+
+    void moveAndDrawBalls();
 
     std::atomic<bool> terminate{false};
 };

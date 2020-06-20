@@ -29,8 +29,7 @@ void GameManager::init() {
     }
 }
 
-int GameManager::run() {
-    std::thread createThread(&GameManager::create_threads, this);
+void GameManager::moveAndDrawBalls() {
     while (!this->terminate) {
         clear();
 
@@ -45,6 +44,11 @@ int GameManager::run() {
         this_thread::sleep_for(chrono::microseconds(refreshFreq));
         refresh();
     }
+}
+
+int GameManager::run() {
+    std::thread createThread(&GameManager::create_threads, this);
+    moveAndDrawBalls();
     if (createThread.joinable()) {
         createThread.join();
     }
