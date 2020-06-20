@@ -42,7 +42,11 @@
 cmake-build-*/
 CMakeFiles/
 cmake_install.cmake
+CMakeCache.txt
 Makefile
+
+#project output
+main
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
@@ -52,6 +56,7 @@ Makefile
 
 # IntelliJ
 out/
+*.cbp
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
