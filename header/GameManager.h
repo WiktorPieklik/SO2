@@ -6,11 +6,11 @@
 #define SO2_1_GAMEMANAGER_H
 
 #include <vector>
-#include "Ball.h"
-#include "Barrier.h"
 #include <iostream>
 #include <atomic>
 #include <mutex>
+#include "Ball.h"
+#include "Barrier.h"
 
 class GameManager {
 private:
@@ -20,6 +20,7 @@ private:
     std::atomic<int **> coordinates{};
 
     void init();
+
     void create_threads();
 
     int thread_count;
@@ -36,9 +37,7 @@ public:
     int run();
 
     void terminate_program();
-
     void requestJoin();
-
     void drawObjects();
 
     std::atomic<bool> terminate{false};

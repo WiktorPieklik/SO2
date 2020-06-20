@@ -12,6 +12,7 @@
 #include <mutex>
 #include <atomic>
 #include <random>
+#include "Barrier.h"
 
 using namespace std;
 
@@ -23,18 +24,23 @@ private:
     int x_direction, y_direction;
     std::atomic<int **> coordinates;
     std::atomic<bool> terminated{false};
-//    std::atomic<bool> isBlocked{false};
+    std::atomic<bool> isBlocked{false};
+    Barrier *barrier;
 
     void move();
 
     void handleCollision(int next_x, int next_y);
 
+    bool isInCriticalZone();
+
 public:
-    Ball(WINDOW *window, int id, int **coordinates);
+    Ball(WINDOW *window, int id, int **coordinates, Barrier *barrier);
 
     void run();
+
     void terminate_exec();
-//    void setBlocked(bool isBlocked);
+
+    void setBlocked(bool isBlocked);
 };
 
 

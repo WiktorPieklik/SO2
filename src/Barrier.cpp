@@ -1,5 +1,5 @@
 //
-// Created by Wiktor Pieklik on 20/06/2020.
+// Created by Wiktor Pieklik
 //
 
 #include "../header/Barrier.h"
@@ -36,6 +36,27 @@ void Barrier::draw() {
         mvvline(y, x, representingSign, length);
     }
     blockingSideMutex.unlock();
+}
+
+BlockingRect Barrier::getBlockingCoordinates() {
+    blockingSideMutex.lock();
+    BlockingRect rect;
+    if (blockingSide == North || blockingSide == South) {
+        rect.top_left_x = x;
+        rect.bottom_right_x = x + length;
+        rect.top_left_y = y - 1;
+        rect.bottom_right_y = y + 1;
+    } else {
+        rect.top_left_x = x - 1;
+        rect.bottom_right_x = x + 1;
+        rect.top_left_y = y;
+        rect.bottom_right_y = y + length;
+    }
+    rect.side = blockingSide;
+    rect.length = length;
+    blockingSideMutex.unlock();
+
+    return rect;
 }
 
 void Barrier::rotate() {

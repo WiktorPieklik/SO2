@@ -1,5 +1,5 @@
 //
-// Created by Wiktor Pieklik on 20/06/2020.
+// Created by Wiktor Pieklik
 //
 
 #ifndef SO2_1_BARRIER_H
@@ -19,6 +19,15 @@ enum BlockingSide {
     West = 3,
 };
 
+typedef struct blocking_rectangle {
+    int top_left_x;
+    int top_left_y;
+    int bottom_right_x;
+    int bottom_right_y;
+    int length;
+    BlockingSide side;
+} BlockingRect;
+
 class Barrier {
 private:
     char representingSign;
@@ -30,19 +39,18 @@ private:
     std::atomic<bool> terminated{false};
 
     void calculatePosition();
-
     void init();
-
     void rotate(); //anti-clockwise
 
 public:
     Barrier(WINDOW *window);
 
     void run();
-
     void draw();
 
     void terminate_exec();
+
+    BlockingRect getBlockingCoordinates();
 
 };
 

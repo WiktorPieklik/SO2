@@ -63,7 +63,7 @@ void GameManager::create_threads() {
     std::srand(std::time(nullptr));
     for (int i = 0; i < thread_count && !this->terminate; i++) {
         threadMutex.lock();
-        shared_ptr<Ball> ball(new Ball(stdscr, i, coordinates));
+        shared_ptr<Ball> ball(new Ball(stdscr, i, coordinates, barrier));
         balls.push_back(ball);
         threads.emplace_back(&Ball::run, balls[i]);
         threadMutex.unlock();

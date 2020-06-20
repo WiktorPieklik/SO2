@@ -4,25 +4,29 @@
 
 #include "../header/Ball.h"
 
-Ball::Ball(WINDOW *window, int id, int **coordinates) {
+Ball::Ball(WINDOW *window, int id, int **coordinates, Barrier *barrier) {
     getmaxyx(window, max_y, max_x);
-    x = max_x / 2;
+    x = max_x / 2 + 6;
     y = max_y - 1;
 
     x_direction = (std::rand() % 5 + 1) * (1 - (std::rand() % 3) + 1);
     y_direction = std::rand() % 3 + 1;
     this->coordinates = coordinates;
     this->id = id;
+    this->barrier = barrier;
 }
 
-void Ball::move()
-{
-    int next_x = x + x_direction;
-    int next_y = y + y_direction;
-    handleCollision(next_x, next_y);
-    coordinates[0][id] = y;
-    coordinates[1][id] = x;
-    this_thread::sleep_for(std::chrono::milliseconds(35));
+void Ball::move() {
+    if (!isBlocked) {
+        int next_x = x + x_direction;
+        int next_y = y + y_direction;
+        handleCollision(next_x, next_y);
+        coordinates[0][id] = y;
+        coordinates[1][id] = x;
+        this_thread::sleep_for(std::chrono::milliseconds(35));
+    } else {
+
+    }
 }
 
 void Ball::handleCollision(int next_x, int next_y)
