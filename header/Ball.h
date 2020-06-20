@@ -23,6 +23,7 @@ private:
     int x_direction, y_direction;
     std::atomic<int **> coordinates;
     std::atomic<bool> terminated{false};
+//    std::atomic<bool> isBlocked{false};
 
     void move();
 
@@ -32,8 +33,8 @@ public:
     Ball(WINDOW *window, int id, int **coordinates);
 
     void run();
-
     void terminate_exec();
+//    void setBlocked(bool isBlocked);
 };
 
 

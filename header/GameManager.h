@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "Ball.h"
+#include "Barrier.h"
 #include <iostream>
 #include <atomic>
 #include <mutex>
@@ -15,7 +16,7 @@ class GameManager {
 private:
     std::vector<std::thread> threads;
     std::vector<std::shared_ptr<Ball>> balls;
-    std::thread exit_thread;
+    std::thread exit_thread, barrier_thread;
     std::atomic<int **> coordinates{};
 
     void init();
@@ -23,6 +24,7 @@ private:
 
     int thread_count;
     int refreshFreq{};
+    Barrier *barrier;
     std::mutex threadMutex;
 
 
@@ -34,9 +36,10 @@ public:
     int run();
 
     void terminate_program();
+
     void requestJoin();
 
-    void moveAndDrawBalls();
+    void drawObjects();
 
     std::atomic<bool> terminate{false};
 };
