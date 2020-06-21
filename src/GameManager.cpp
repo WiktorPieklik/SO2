@@ -27,24 +27,29 @@ void GameManager::init() {
     for (int i = 0; i < 2; i++) {
         coordinates[i] = new int[thread_count];
     }
+    barrier = new Barrier(stdscr);
 }
 
-int GameManager::run() {
-    std::thread createThread(&GameManager::create_threads, this);
+void GameManager::drawObjects() {
     while (!this->terminate) {
         clear();
 
+        barrier->draw();
         threadMutex.lock();
-        for (size_t i = 0; i < balls.size(); i++) {
-            int x = coordinates[1][i];
-            int y = coordinates[0][i];
-            mvprintw(y, x, "o");
+        for (auto &ball : balls) {
+            ball->draw();
         }
         threadMutex.unlock();
 
         this_thread::sleep_for(chrono::microseconds(refreshFreq));
         refresh();
     }
+}
+
+int GameManager::run() {
+    std::thread createThread(&GameManager::create_threads, this);
+    barrier_thread = std::thread(&Barrier::run, barrier);
+    drawObjects();
     if (createThread.joinable()) {
         createThread.join();
     }
@@ -56,7 +61,7 @@ void GameManager::create_threads() {
     std::srand(std::time(nullptr));
     for (int i = 0; i < thread_count && !this->terminate; i++) {
         threadMutex.lock();
-        shared_ptr<Ball> ball(new Ball(stdscr, i, coordinates));
+        shared_ptr<Ball> ball(new Ball(stdscr, i, coordinates, barrier));
         balls.push_back(ball);
         threads.emplace_back(&Ball::run, balls[i]);
         threadMutex.unlock();
@@ -72,6 +77,9 @@ void GameManager::requestJoin() {
     if (this->exit_thread.joinable()) {
         this->exit_thread.join();
     }
+    if (barrier_thread.joinable()) {
+        barrier_thread.join();
+    }
 }
 
 void GameManager::terminate_program() {
@@ -80,6 +88,7 @@ void GameManager::terminate_program() {
         ball->terminate_exec();
     }
     threadMutex.unlock();
+    barrier->terminate_exec();
     endwin();
 }
 
@@ -88,4 +97,3 @@ GameManager::~GameManager() {
     balls.clear();
     this->threads.clear();
 }
-

@@ -9,9 +9,9 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
-#include <mutex>
 #include <atomic>
 #include <random>
+#include "Barrier.h"
 
 using namespace std;
 
@@ -23,15 +23,22 @@ private:
     int x_direction, y_direction;
     std::atomic<int **> coordinates;
     std::atomic<bool> terminated{false};
+    Barrier *barrier;
 
     void move();
 
     void handleCollision(int next_x, int next_y);
 
+    bool isTouchingBarrier(BlockingRect blockingRect);
+
+    bool isCollidingWithBarrier();
+
 public:
-    Ball(WINDOW *window, int id, int **coordinates);
+    Ball(WINDOW *window, int id, int **coordinates, Barrier *barrier);
 
     void run();
+
+    void draw();
 
     void terminate_exec();
 };
