@@ -24,7 +24,6 @@ typedef struct blocking_rectangle {
     int top_left_y;
     int bottom_right_x;
     int bottom_right_y;
-    int length;
     BlockingSide side;
 } BlockingRect;
 
@@ -33,13 +32,16 @@ private:
     char representingSign;
     int length;
     int max_x, max_y;
+    int dx, dy; //defines offset in collision detection
     int x, y; //top left, bottom right
     BlockingSide blockingSide;
     std::mutex blockingSideMutex;
     std::atomic<bool> terminated{false};
 
     void calculatePosition();
+
     void init();
+
     void rotate(); //anti-clockwise
 
 public:

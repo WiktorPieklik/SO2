@@ -34,14 +34,12 @@ void GameManager::drawObjects() {
     while (!this->terminate) {
         clear();
 
+        barrier->draw();
         threadMutex.lock();
-        for (size_t i = 0; i < balls.size(); i++) {
-            int x = coordinates[1][i];
-            int y = coordinates[0][i];
-            mvprintw(y, x, "o");
+        for (auto &ball : balls) {
+            ball->draw();
         }
         threadMutex.unlock();
-        barrier->draw();
 
         this_thread::sleep_for(chrono::microseconds(refreshFreq));
         refresh();

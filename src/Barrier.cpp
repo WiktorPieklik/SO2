@@ -12,6 +12,8 @@ Barrier::Barrier(WINDOW *window) {
 void Barrier::init() {
     blockingSide = South;
     representingSign = 'x';
+    dx = 2;
+    dy = 1;
 }
 
 void Barrier::calculatePosition() {
@@ -39,21 +41,20 @@ void Barrier::draw() {
 }
 
 BlockingRect Barrier::getBlockingCoordinates() {
-    blockingSideMutex.lock();
     BlockingRect rect;
+    blockingSideMutex.lock();
     if (blockingSide == North || blockingSide == South) {
         rect.top_left_x = x;
         rect.bottom_right_x = x + length;
-        rect.top_left_y = y - 1;
-        rect.bottom_right_y = y + 1;
+        rect.top_left_y = y - dy;
+        rect.bottom_right_y = y + dy;
     } else {
-        rect.top_left_x = x - 1;
-        rect.bottom_right_x = x + 1;
+        rect.top_left_x = x - dx;
+        rect.bottom_right_x = x + dx;
         rect.top_left_y = y;
         rect.bottom_right_y = y + length;
     }
     rect.side = blockingSide;
-    rect.length = length;
     blockingSideMutex.unlock();
 
     return rect;
@@ -68,7 +69,7 @@ void Barrier::rotate() {
 
 void Barrier::run() {
     while (!terminated) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         rotate();
     }
 }
